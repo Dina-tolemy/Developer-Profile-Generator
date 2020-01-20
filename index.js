@@ -1,8 +1,10 @@
 const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
-const PDFDocument = require('pdfkit');
-const doc = new PDFDocument;
+
+var pdfMake = require('pdfmake/build/pdfmake.js');
+var pdfFonts = require('pdfmake/build/vfs_fonts.js');
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 inquirer
     .prompt({
@@ -13,6 +15,7 @@ inquirer
         const queryUrl = `https://api.github.com/users/${username}/repos?per_page=100`;
         axios.get(queryUrl)
         .then(function (res) {
+            console.log(res);
             const repoNames = res.data.map(function (repo) {
                 return repo.name;
             });
