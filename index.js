@@ -43,6 +43,7 @@ inquirer
 
 
                 const userName = res.data.name;
+                const userEmail=res.data.email;
                 const userGitHub = res.data.html_url;
                 const userImg = res.data.avatar_url;
                 const Followers = res.data.followers;
@@ -82,6 +83,13 @@ inquirer
                         },
                         '\n',
                         ` ${userGitHub}`,
+                        '\n',
+                        '\n',
+                        {
+                            text: 'Email: ', style: 'subHeader'
+                        },
+                        '\n',
+                        ` ${userEmail}`,
                         '\n',
                         '\n',
                         {
@@ -129,11 +137,13 @@ inquirer
                         header: {
                             fontSize: 24,
                             bold: true,
-                            alignment: 'center'
+                            alignment: 'center',
+                            background: backgroundColor
                         },
                         subHeader: {
                             fontSize: 18,
-                            bold: true
+                            bold: true,
+                            background: backgroundColor
                         }
                     }
                 };
