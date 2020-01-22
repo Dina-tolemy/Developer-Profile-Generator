@@ -131,19 +131,25 @@ inquirer
                         `${userreposLink}`
                     ],
                     defaultStyle: {
-                        font: 'Helvetica'
+                        font: 'Helvetica',
+                        fontSize: 16,
+                        color: 'grey'
                     },
                     styles: {
                         header: {
+                            decoration: 'underline',
                             fontSize: 24,
                             bold: true,
                             alignment: 'center',
-                            background: backgroundColor
+                            background: backgroundColor,
+                            color: 'darkred'
                         },
                         subHeader: {
+                            decoration: 'underline',
                             fontSize: 18,
                             bold: true,
-                            background: backgroundColor
+                            background: backgroundColor,
+                            color:'darkred'
                         }
                     }
                 };
