@@ -31,17 +31,19 @@ const inquirer = require("inquirer");
 const PdfPrinter = require('pdfmake');
 const printer = new PdfPrinter(fonts);
 inquirer
-    .prompt({
+    .prompt([{
         message: "Enter your GitHub username:",
         name: "username"
-    })
-    .then(function ({ username }) {
+    },
+    {
+        message: "chhose your color: ",
+        name: "usercolor"
+    }])
+    .then(function ({username,usercolor}) {
         const queryUrl = `https://api.github.com/users/${username}`;
         axios.get(queryUrl)
             .then(function (res) {
                 //  console.log(res);
-
-
                 const userName = res.data.name;
                 const userEmail=res.data.email;
                 const userGitHub = res.data.html_url;
@@ -53,7 +55,7 @@ inquirer
                 const userBlog = res.data.blog;
                 const userPublicRepo = res.data.public_repos;
                 const userreposLink = res.data.repos_url;
-                const backgroundColor = res.data.gravatar_id;
+                const backgroundColor = usercolor;
 
                 var docDefinition = {
                     content: [
@@ -133,7 +135,8 @@ inquirer
                     defaultStyle: {
                         font: 'Helvetica',
                         fontSize: 16,
-                        color: 'grey'
+                        color: 'grey',
+                        
                     },
                     styles: {
                         header: {
