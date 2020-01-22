@@ -28,41 +28,113 @@ var fonts = {
 const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
-
-var PdfPrinter = require('pdfmake');
-var printer = new PdfPrinter(fonts);
+const PdfPrinter = require('pdfmake');
+const printer = new PdfPrinter(fonts);
 inquirer
     .prompt({
         message: "Enter your GitHub username:",
         name: "username"
     })
     .then(function ({ username }) {
-        const queryUrl = `https://api.github.com/users/${username}/repos?per_page=100`;
+        const queryUrl = `https://api.github.com/users/${username}`;
         axios.get(queryUrl)
             .then(function (res) {
-               // console.log(res);
-                const repoNames = res.data.map(function (repo) {
-                    return repo.name;
-                });
-                const projectUrl = res.data.map(function (repo) {
-                    return repo.url;
-                });
-                const repoUrlStr = projectUrl.join("\n");
-                const repoNamesStr = repoNames.join("\n");
+                //  console.log(res);
+
+
+                const userName = res.data.name;
+                const userGitHub = res.data.html_url;
+                const userImg = res.data.avatar_url;
+                const Followers = res.data.followers;
+                const userFollowing = res.data.following;
+                const userLocation = res.data.location;
+                const userBio = res.data.bio;
+                const userBlog = res.data.blog;
+                const userPublicRepo = res.data.public_repos;
+                const userreposLink = res.data.repos_url;
+                const backgroundColor = res.data.gravatar_id;
+
                 var docDefinition = {
                     content: [
-                        `${username}`,
+                        {
+                            text:`${userName}`, style: 'header'
+                        },
                         '\n',
-                        `${username} has ${repoNames.length} project: `,
-                        "\n",
-                        `${repoNamesStr}`,
-                        "\n",
-                        "links to the deployed projects on git hub: ",
-                        "\n",
-                        `${repoUrlStr}`,
+                        '\n',
+                        {
+                            text:
+                                'lives in ', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userLocation}`,
+                        '\n',
+                        '\n',
+                        {
+                            text:
+                                'Bio', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userBio}`,
+                        '\n',
+                        '\n',
+                        {
+                            text: 'GitHub Link: ', style: 'subHeader'
+                        },
+                        '\n',
+                        ` ${userGitHub}`,
+                        '\n',
+                        '\n',
+                        {
+                            text: 'Blog: ', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userBlog}`,
+                        '\n',
+                        '\n',
+                        {
+                            text:
+                                'Followers', style: 'subHeader'
+                        },
+                        '\n',
+                        `Number of followers on gitHub: ${Followers}`,
+                        '\n',
+                        '\n',
+                        {
+                            text:
+                                'Following', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userFollowing} people`,
+                        '\n',
+                        '\n',
+                        {
+                            text:
+                                'Public Repo', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userName} has ${userPublicRepo} public repositories on GitHub`,
+                        '\n',
+                        '\n',
+                        {
+                            text:
+                                'Link to the repos in GitHub: ', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userreposLink}`
                     ],
                     defaultStyle: {
                         font: 'Helvetica'
+                    },
+                    styles: {
+                        header: {
+                            fontSize: 24,
+                            bold: true,
+                            alignment: 'center'
+                        },
+                        subHeader: {
+                            fontSize: 18,
+                            bold: true
+                        }
                     }
                 };
                 var pdfDoc = printer.createPdfKitDocument(docDefinition);
