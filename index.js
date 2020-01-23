@@ -41,9 +41,21 @@ inquirer
     }])
     .then(function ({username,usercolor}) {
         const queryUrl = `https://api.github.com/users/${username}`;
-        axios.get(queryUrl)
-            .then(function (res) {
-                //  console.log(res);
+        const querryurl2=`https://api.github.com/users/${username}/repos?per_page=100`;
+
+        axios.all([
+            axios.get(queryUrl),
+            axios.get(querryurl2)
+          ])
+            .then(axios.spread((res, repoRes)=> {
+
+                let repoStarscount = repoRes.data.map(function(repo) {
+                     return repo.stargazers_count;
+                    }); 
+                var starresult=repoStarscount.reduce(add,0);
+                function add(a, b) {
+                    return a + b;
+                };               
                 const userName = res.data.name;
                 const userEmail=res.data.email;
                 const userGitHub = res.data.html_url;
@@ -127,6 +139,14 @@ inquirer
                         '\n',
                         {
                             text:
+                                'GitHub Stars', style: 'subHeader'
+                        },
+                        '\n',
+                        `${userName} has ${starresult} Stars on GitHub`,
+                        '\n',
+                        '\n',
+                        {
+                            text:
                                 'Link to the repos in GitHub: ', style: 'subHeader'
                         },
                         '\n',
@@ -135,13 +155,12 @@ inquirer
                     defaultStyle: {
                         font: 'Helvetica',
                         fontSize: 16,
-                        color: 'grey',
-                        
+                        color: 'grey',      
                     },
                     styles: {
                         header: {
                             decoration: 'underline',
-                            fontSize: 24,
+                            fontSize: 26,
                             bold: true,
                             alignment: 'center',
                             background: backgroundColor,
@@ -149,7 +168,7 @@ inquirer
                         },
                         subHeader: {
                             decoration: 'underline',
-                            fontSize: 18,
+                            fontSize: 20,
                             bold: true,
                             background: backgroundColor,
                             color:'darkred'
@@ -160,5 +179,5 @@ inquirer
                 pdfDoc.pipe(fs.createWriteStream('document.pdf'));
                 pdfDoc.end();
 
-            });
+            }));
     });
