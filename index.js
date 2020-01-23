@@ -36,7 +36,7 @@ inquirer
         name: "username"
     },
     {
-        message: "chhose your color: ",
+        message: "chose your color: ",
         name: "usercolor"
     }])
     .then(function ({username,usercolor}) {
@@ -163,15 +163,13 @@ inquirer
                             fontSize: 26,
                             bold: true,
                             alignment: 'center',
-                            background: backgroundColor,
-                            color: 'darkred'
+                            color: backgroundColor,
                         },
                         subHeader: {
                             decoration: 'underline',
                             fontSize: 20,
                             bold: true,
-                            background: backgroundColor,
-                            color:'darkred'
+                            color:backgroundColor,
                         }
                     }
                 };
